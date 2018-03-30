@@ -4,7 +4,7 @@
 
 Abstract:
 
-For the scope of this project, the development of a visual GIS database with a User Interface is a realistic goal. This software will allow users to essentially upload .shp, and .dbf files to a database while also being able to visualize such data in two dimensionally (3D and VR for future development). 
+For the scope of this project, the development of a visual GIS database with a User Interface is a realistic goal. This software will allow users to essentially upload .shp, and .dbf files to a database while also being able to visualize such data in 2D and 3D (VR for future development). 
 
 
 Language: Python
