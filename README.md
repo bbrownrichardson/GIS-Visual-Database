@@ -9,9 +9,10 @@ For the scope of this project, the development of a visual GIS database with a U
 
 Language: Python
 
-Frameworks: KIVY, sqlite
+Libraries: Kivy, Kivy Garden, sqlite3, matplotlib, numpy, shutil, os
 
 
-NOTE: Anyone interested in said software will have to wait for later stages of development to view the source code. Software in early stages of development will be placed in encrypt zip as I am far too cheap to purchase private repositories, but if anyone manages to crack said zips I'll be more impressed with your ability to do so than upset that the software was seen by others. Heck if you manage to open the zip do a pull request so we can chat haha.
+![alt text](Screenshots/VisualScreen 2D.jpg "Shapefile visualized in 2D")
+![alt text](Screenshots/VisualScreen 3D.jpg "Shapefile visualized in 3D")
 
 
