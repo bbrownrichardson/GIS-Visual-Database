@@ -12,9 +12,9 @@ Language: Python
 Libraries: Kivy, Kivy Garden, sqlite3, matplotlib, numpy, shutil, os
 
 
-![alt text]("Screenshots/VisualScreen%202D.jpg" "Shapefile visualized in 2D")
+![alt text](https://github.com/bbrownrichardson/GIS-Visual-Database/blob/master/Screenshots/VisualScreen%202D.jpg" "Shapefile visualized in 2D")
 
 
-![alt text]("Screenshots/VisualScreen%203D.jpg" "Shapefile visualized in 3D")
+![alt text]("https://github.com/bbrownrichardson/GIS-Visual-Database/blob/master/Screenshots/VisualScreen%203D.jpg" "Shapefile visualized in 3D")
 
 
