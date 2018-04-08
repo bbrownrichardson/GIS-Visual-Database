@@ -1,0 +1,2 @@
+This folder contains screenshots of VBASE's current state. Objects Presented in database are mock objects created for test purposes. 
+NOTE: Early stages of development
