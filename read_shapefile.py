@@ -42,27 +42,3 @@ class ReadShapeFile:
         mydbf = open(dbf_file, "rb")
         sf = shapefile.Reader(shp=myshp, dbf=mydbf)
         return sf
-
-    def data_extraction(self):
-        """
-
-        :return:
-        """
-        pass
-        # myshp = open("Uploaded_Shapefiles\\" + self.shp_name, "rb")
-        # mydbf = open("Uploaded_Shapefiles\\" + self.dbf_name, "rb")
-
-
-def main():
-    # c = ReadShapeFile('C:\Users\Brianna\Documents\College\College of '
-    #                   'Wooster\Junior\cs200 - Algorithm Analysis\Project '
-    #                   'Draft\Uploaded_Shapefiles' + chr(92),
-    #                   'Shapefiles\CollegeCampus.shp',
-    #                   'Shapefiles\CollegeCampus.dbf',
-    #                   'TITLE BRI')
-    # c.create_return_new_dir()
-    pass
-
-
-if __name__ == '__main__':
-    main()

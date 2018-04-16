@@ -248,31 +248,3 @@ class GetAllDatabase:
             })
 
         return all_data_list
-
-
-def main():
-    # temp = InsertDatabase('Brianna', 'db.sqlite')
-    # temp.insert_profile()
-    # temp.insert_object('Bri 4th Title')
-    # temp.insert_location('7894 st.', 'Cleveland', 'Oh', 'United States',
-    #                      44691)
-    # temp.insert_file('Cleveland.shp', 'Cleveland.dbf', 'ClevalndDirectory')
-    #
-    # temp1 = InsertDatabase('Jacob', 'db.sqlite')
-    # temp1.insert_profile()
-    # temp1.insert_object('TIIIIITTTLLLEEE')
-    # temp1.insert_location('Loveeee', 'Citydd', 'WI', 'COntry',
-    #                       78454)
-    # temp1.insert_file('Love.shp', 'Love.dbf', 'Love Directory')
-    var = IndividualGetDatabase('Test', 'db.sqlite')
-    var.get_object()
-    var.get_profile()
-    var.get_location()
-    var.get_files()
-
-    # GetAllDatabase('db.sqlite').get_all()
-    pass
-
-
-if __name__ == '__main__':
-    main()
