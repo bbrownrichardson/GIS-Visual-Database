@@ -51,9 +51,9 @@ class VisualSetup:
         shapefile
         :return: ax - figure containing visualized data
         """
-        for shape in self.sf_reader.iterShapeRecords():
-            x = [i[0] for i in shape.shape.points[:]]
-            y = [i[1] for i in shape.shape.points[:]]
+        for shape in self.sf_reader.shapes():
+            x = [i[0] for i in shape.points[:]]
+            y = [i[1] for i in shape.points[:]]
             plt.plot(x, y)
 
         ax = plt.gcf()
@@ -95,27 +95,42 @@ class VisualSetup:
 
             elif shapes[i].shapeType == MULTIPATCH:
                 # go typical 3D scene setup
-                part = list()
-                shape_types = list()
-                for j in range(1, len(shapes[i].parts) + 1, 1):
-                    k = j - 1
-                    section = list()
-                    if j < len(shapes[i].parts):
-                        section.extend(shapes[i].points[
-                               shapes[i].parts[j]:shapes[i].parts[k]])
-                        section.append(
-                            shapes[i].z[shapes[i].parts[j]:shapes[i].parts[k]])
-                        shape_types.append(shapes[i].shapeType)
-                        part.append(section)
-                    # elif j == len(shapes[i].parts):
-                    #     section.extend(
-                    #         shapes[i].points[shapes[i].parts[-1]:-1])
-                    #     section.append(shapes[i].z[shapes[i].parts[-1]:-1])
-                    #     shape_types.append(shapes[i].shapeType)
-
-                self.sf_writer.poly(parts=part,
-                                    partTypes=shape_types,
-                                    shapeType=MULTIPATCH)
+                self.multipatch_draw(shapes[i])
+                # part = list()
+                # shape_types = list()
+                # for j in range(1, len(shapes[i].parts), 1):
+                #     x_y_section = list()
+                #     z_section = list()
+                #     k = j - 1
+                #     x_y_section.append(shapes[i].points[shapes[i].parts[k]:
+                #                                         shapes[i].parts[j]])
+                #     z_section.append(shapes[i].z[shapes[i].parts[k]:shapes[
+                #         i].parts[j]])
+                #
+                #     for coor in range(0, len(z_section), 1):
+                #         section = list()
+                #         section.append(x_y_section[coor][0])
+                #         section.append(x_y_section[coor][1])
+                #         section.append(z_section[coor])
+                #         part.append(section)
+                #
+                #     shape_types.append(MULTIPATCH)
+                #
+                # last_xy = list()
+                # last_z = list()
+                # last_xy.append(shapes[i].points[shapes[i].parts[-1]:-1])
+                # last_z.append(shapes[i].z[shapes[i].parts[-1]:-1])
+                # for coor in range(0, len(last_z), 1):
+                #     section = list()
+                #     section.append(last_xy[coor][0])
+                #     section.append(last_xy[coor][1])
+                #     section.append(last_z[coor])
+                #     part.append(section)
+                #
+                # shape_types.append(MULTIPATCH)
+                #
+                # self.sf_writer.poly(parts=part, partTypes=shape_types,
+                #                     shapeType=MULTIPATCH)
 
         self.sf_writer.save("3D_temp")
 
@@ -141,7 +156,7 @@ class VisualSetup:
             part.append(surface)
 
         for i in range(0, len(part), 1):
-            shapestype.append(5)
+            shapestype.append(POLYGON)
 
         self.sf_writer.poly(parts=part,
                             partTypes=shapestype,
@@ -189,7 +204,7 @@ class VisualSetup:
 
             self.sf_writer.line(parts=part, shapeType=shapestype)
 
-    def draw_shapes(self, xy_coors, z_part, rand_color):
+    def draw_3d_shapes(self, xy_coors, z_part, rand_color):
         """
         Actual drawing of 3D elements to matplotlib figure
         :param xy_coors: x and y coordinates of current part
@@ -197,7 +212,6 @@ class VisualSetup:
         :param rand_color: color value for a particular shape
         :return: None
         """
-
         # if z_coordinates are all the same value that means
         # shape is flat surface
         if all(x == z_part[0] for x in z_part) is True:
@@ -231,12 +245,32 @@ class VisualSetup:
             z = np.array(z_ranges)
             ax.plot_surface(x, y, z, color=rand_color)
 
+    def multipatch_draw(self, curr_shape):
+        """
+        Take a multipatch shape and draw it to a matplotlib figure
+        :param curr_shape: current multipatch shape needing to be drawn
+        :return: None
+        """
+        rand_color = [random.uniform(0, 1), random.uniform(0, 1),
+                      random.uniform(0, 1)]
+        for k in range(1, len(curr_shape.parts), 1):
+            j = k - 1
+            xy_coors = curr_shape.points[
+                       curr_shape.parts[j]:curr_shape.parts[k]]
+            z_part = curr_shape.z[curr_shape.parts[j]:curr_shape.parts[k]]
+
+            self.draw_3d_shapes(xy_coors, z_part, rand_color)
+
+        xy_coors = curr_shape.points[
+                   curr_shape.parts[-1]:-1]
+        z_part = curr_shape.z[curr_shape.parts[-1]:-1]
+        self.draw_3d_shapes(xy_coors, z_part, rand_color)
+
     def setup_3d_scene(self):
         """
         Setting up the 3D scene by shape type and drawing to figure accordingly
         :return: None
         """
-
         r = shapefile.Reader('3D_temp')
         shapes = r.shapes()
         for i in range(0, len(shapes), 1):
@@ -269,20 +303,7 @@ class VisualSetup:
                 ax.plot(x_coors, y_coors, z_coors)
 
             elif shapes[i].shapeType == MULTIPATCH:
-                rand_color = [random.uniform(0, 1), random.uniform(0, 1),
-                              random.uniform(0, 1)]
-                for k in range(1, len(shapes[i].parts), 1):
-                    j = k - 1
-                    xy_coors = shapes[i].points[
-                               shapes[i].parts[j]:shapes[i].parts[k]]
-                    z_part = shapes[i].z[shapes[i].parts[j]:shapes[i].parts[k]]
-
-                    self.draw_shapes(xy_coors, z_part, rand_color)
-
-                xy_coors = shapes[i].points[
-                           shapes[i].parts[-1]:-1]
-                z_part = shapes[i].z[shapes[i].parts[-1]:-1]
-                self.draw_shapes(xy_coors, z_part, rand_color)
+                self.multipatch_draw(shapes[i])
 
                 # x_coors = list()
                 # y_coors = list()
