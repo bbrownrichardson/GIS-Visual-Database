@@ -6,7 +6,6 @@
 import shapefile
 import matplotlib.pyplot as plt
 import random
-from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 import numpy as np
 
 # Constants for shape types
@@ -32,19 +31,6 @@ class VisualSetup:
         self.sf_writer = shapefile.Writer()
         self.fig = plt.figure()
 
-    def matplot_2d_popup(self):
-        """
-
-        :return:
-        """
-
-        plt.figure()
-        for shape in self.sf_reader.iterShapeRecords():
-            x = [i[0] for i in shape.shape.points[:]]
-            y = [i[1] for i in shape.shape.points[:]]
-            plt.plot(x, y)
-        plt.show()
-
     def get_plt_2d(self):
         """
         Get the matplotlib figure that contains the 2D scene of selected
@@ -66,7 +52,6 @@ class VisualSetup:
         shapefile
         :return: self.fig - figure containig visualized data
         """
-        # self.fig.show()
         return self.fig
 
     def setting_shapes_to_3d(self):
@@ -96,41 +81,6 @@ class VisualSetup:
             elif shapes[i].shapeType == MULTIPATCH:
                 # go typical 3D scene setup
                 self.multipatch_draw(shapes[i])
-                # part = list()
-                # shape_types = list()
-                # for j in range(1, len(shapes[i].parts), 1):
-                #     x_y_section = list()
-                #     z_section = list()
-                #     k = j - 1
-                #     x_y_section.append(shapes[i].points[shapes[i].parts[k]:
-                #                                         shapes[i].parts[j]])
-                #     z_section.append(shapes[i].z[shapes[i].parts[k]:shapes[
-                #         i].parts[j]])
-                #
-                #     for coor in range(0, len(z_section), 1):
-                #         section = list()
-                #         section.append(x_y_section[coor][0])
-                #         section.append(x_y_section[coor][1])
-                #         section.append(z_section[coor])
-                #         part.append(section)
-                #
-                #     shape_types.append(MULTIPATCH)
-                #
-                # last_xy = list()
-                # last_z = list()
-                # last_xy.append(shapes[i].points[shapes[i].parts[-1]:-1])
-                # last_z.append(shapes[i].z[shapes[i].parts[-1]:-1])
-                # for coor in range(0, len(last_z), 1):
-                #     section = list()
-                #     section.append(last_xy[coor][0])
-                #     section.append(last_xy[coor][1])
-                #     section.append(last_z[coor])
-                #     part.append(section)
-                #
-                # shape_types.append(MULTIPATCH)
-                #
-                # self.sf_writer.poly(parts=part, partTypes=shape_types,
-                #                     shapeType=MULTIPATCH)
 
         self.sf_writer.save("3D_temp")
 
@@ -169,7 +119,6 @@ class VisualSetup:
         :param shape_type: shape type of shape argument
         :return: None
         """
-
         if shape_type == POINT or MULTIPOINT or POINTM or MULTIPOINTM:
             for i in shape.points:
                 self.sf_writer.point(i[0], i[1], 0.5, shapeType=POINTZ)
@@ -304,56 +253,3 @@ class VisualSetup:
 
             elif shapes[i].shapeType == MULTIPATCH:
                 self.multipatch_draw(shapes[i])
-
-                # x_coors = list()
-                # y_coors = list()
-                # z_floor = list()
-                # z_ranges = list()
-                # z_flat_floor = list()
-                # z_flat_ceiling = list()
-                #
-                # shape_var = r.shape(i).points
-                # z_coors = r.shape(i).z
-                # z_min = min(z_coors)
-                # z_max = max(z_coors)
-                #
-                # for j in shape_var:
-                #     x_coors.append(j[0])
-                #     y_coors.append(j[1])
-                #
-                # for k in range(0, len(z_coors), 1):
-                #     z_floor.append(0)
-                #     z_flat_floor.append(z_min)
-                #     z_flat_ceiling.append(z_max)
-                #
-                # z_ranges.append(z_coors)
-                # z_ranges.append(z_floor)
-                #
-                # self.fig.add_subplot(projection='3d')
-                # ax = self.fig.gca(projection='3d')
-                # ax.set_zlim(0, z_max+5)
-                # ax.set_axis_off()
-                # x = np.array(x_coors)
-                # y = np.array(y_coors)
-                # z = np.array(z_ranges)
-                # ax.plot_surface(x, y, z)
-                #
-                # verts = [zip(x_coors, y_coors, z_flat_floor)]
-                # ax.add_collection3d(Poly3DCollection(verts))
-                # verts = [zip(x_coors, y_coors, z_flat_ceiling)]
-                # ax.add_collection3d(Poly3DCollection(verts))
-
-    # plt.show()
-
-
-def main():
-    # myshp = open("Shapefiles\CollegeCampus.shp", "rb")
-    # mydbf = open("Shapefiles\CollegeCampus.dbf", "rb")
-    # sf = shapefile.Reader(shp=myshp, dbf=mydbf)
-    #
-    # shapes = sf.shapes()
-    pass
-
-
-if __name__ == '__main__':
-    main()

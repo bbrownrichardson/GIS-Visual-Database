@@ -7,12 +7,10 @@ from kivy.uix.screenmanager import Screen
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.scrollview import ScrollView
-from kivy.uix.widget import Widget
 from kivy.uix.label import Label
 from kivy.uix.bubble import BubbleButton
 from kivy.uix.popup import Popup
 from kivy.uix.button import Button
-from kivy.graphics import *
 from kivy.clock import Clock
 from kivy.garden.matplotlib.backend_kivyagg import FigureCanvasKivy, \
     FigureCanvasKivyAgg, FigureCanvas, FigureCanvasAgg, NavigationToolbar, \
@@ -22,11 +20,7 @@ from mpl_toolkits.mplot3d import Axes3D
 from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 import matplotlib.pyplot as plt
 import threading
-import time
 import interface
-# from kivy.core.window import Window
-# Window.clearcolor = (0.243, 0.325, 0.478, 0.5)
-# Window.size = (640, 1163)
 
 
 class IntroScreen(Screen):
@@ -45,7 +39,7 @@ class ObjectListScreen(Screen):
     """
     title_returned = None
     interface_call = interface.Interface()
-    v_coords = []
+    v_coords = list()
 
     def __init__(self):
         super(ObjectListScreen, self).__init__()
@@ -75,7 +69,7 @@ class ObjectListScreen(Screen):
         self.frame.add_widget(self.scroll)
         self.add_widget(self.frame)
         self.show_objects()
-        self.v_coords = []
+        self.v_coords = list()
 
     def get_title(self, instance):
         """
@@ -84,9 +78,6 @@ class ObjectListScreen(Screen):
         :param instance: the occurrence of an object
         :return: None
         """
-        # print(str(instance))
-        # print(instance.text)
-        # print(self.get_id(instance))
         self.title_returned = instance.id
 
     def return_title(self):
@@ -115,12 +106,6 @@ class ObjectListScreen(Screen):
         ThreadPopup(self.interface_call.shape_file_three_dimension(
                 instance.id))
         Clock.schedule_once(lambda x: self.transition_visual(), .000001)
-
-        # self.visual_screen_delay()
-        # print(instance.id)
-
-    # def visual_screen_delay(self):
-    #     Clock.schedule_once(lambda x: self.transition_visual(), .00001)
 
     def transition_visual(self):
         v_obj = VisualScreen()
@@ -195,7 +180,7 @@ class UploadScreen(Screen):
     Screen containing an embedded file explorer where users are able to select
     shape files to upload
     """
-    files = []
+    files = list()
 
     def __init__(self):
         super(UploadScreen, self).__init__()
@@ -235,8 +220,6 @@ class UploadScreen(Screen):
         scroll_view.add_widget(file_layout)
 
         for i in UploadScreen.files:
-            # a = Button(text=selected_files['filename']+selected_files[
-            #     'extension'])
             obj = interface.Interface()
             cur_file = obj.file_path_name(i)
             if i is None:
@@ -293,7 +276,7 @@ class UploadScreen(Screen):
             PopupMessage('Incorrect Files \nSelected!!')
 
     def return_to_obj_screen(self):
-        self.files = []
+        self.files = list()
 
 
 class DataEntryScreen(Screen):
@@ -336,7 +319,7 @@ class DataEntryScreen(Screen):
             int_obj.selected_db_names(self.files)
             int_obj.insert_profile_database(temp_dict)
 
-            UploadScreen.files = []
+            UploadScreen.files = list()
             self.manager.current = 'ObjectListScreen'
             self.clear_entries()
             objscrn = ObjectListScreen()
@@ -356,7 +339,7 @@ class DataEntryScreen(Screen):
             int_obj.selected_db_names(self.files)
             int_obj.insert_profile_database(temp_dict)
 
-            UploadScreen.files = []
+            UploadScreen.files = list()
             self.manager.current = 'ObjectListScreen'
             self.clear_entries()
             objscrn = ObjectListScreen()
@@ -378,28 +361,9 @@ class DataEntryScreen(Screen):
 
 class VisualScreen(Screen):
     plt_var = plt.gcf()
-    # fig_var = FigureCanvasKivy(plt_var)
 
     def __init__(self):
         super(VisualScreen, self).__init__()
-    #
-    #     self.box = BoxLayout(orientation='vertical')
-    #     self.return_btn = Button(text='<--', size_hint=(1, .05))
-    #     self.return_btn.bind(on_press=lambda x: self.screen_delay())
-    #     self.box.add_widget(self.return_btn)
-    #
-    #     self.visual_box = BoxLayout(orientation='vertical')
-    #     self.map_widget = FigureCanvasKivy(self.plt_var)
-    #     self.visual_box.add_widget(self.map_widget)
-    #     self.box.add_widget(self.visual_box)
-    #
-    #     # self.box.add_widget(Button(text='test print coordinates',
-    #     #                            size_hint=(1, .05),
-    #     #                            on_press=lambda x: self.test_coord()))
-    #     # self.box.add_widget(Button(text='draw',
-    #     #                            size_hint=(1, .05),
-    #     #                            on_press=lambda x: self.display()))
-    #     self.add_widget(self.box)
 
     def set_map(self):
         """
@@ -470,19 +434,30 @@ class PopupMessage:
 
 class ThreadPopup:
     def __init__(self, running_func):
-        self.process(running_func)
         self.pop_up = Popup()
+        self.process(running_func)
 
     def pop_initate(self):
+        """
+        Initiate popup inform users background tasks are occurring
+        :return: None
+        """
         content = BoxLayout(orientation='vertical')
         message_label = Label(text='Running some awesome \nbackground '
-                                   'tasks...')
+                                   'tasks...', halign="center",
+                              valign="middle")
         content.add_widget(message_label)
-        self.pop_up = Popup(title='HOLD ON BABY', content=content,
-                            size_hint=(0.3, 0.25))
+        self.pop_up = Popup(title='', content=content,
+                            size_hint=(0.3, 0.25), separator_height=0)
         self.pop_up.open()
 
     def process(self, running_func):
+        """
+        Process the thread of the function being ran and call popup_initate()
+        while the thread is alive then close popup when thread dies
+        :param running_func: current function being ran
+        :return: None
+        """
         mythread = threading.Thread(target=running_func)
         mythread.start()
         while mythread.isAlive():

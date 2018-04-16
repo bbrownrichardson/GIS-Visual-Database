@@ -65,36 +65,3 @@ class UploadRequirements:
                 return False
         else:
             return False
-
-
-def main():
-    # file = 'C:\Users\Brianna\Documents\College\College of ' \
-    #        'Wooster\Junior\cs232 - Software Engineering ' \
-    #        'Databases\cs232\print_messages\sommer.py'
-    # if os.path.isfile(file) is True:
-    #     print('FILE')
-    # elif os.path.isdir(file) is True:
-    #     print('Directory')
-    # else:
-    #     print('Neither')
-    # c = Upload(r'C:\\Users\\Brianna\\Documents\\College\\College of '
-    #        r'Wooster\\Junior\\cs200 - Algorithm Analysis\\Project Draft\\Shapefiles\\CollegeCampus.shp')
-    # b = c.file_separation(r'C:\\Users\\Brianna\\Documents\\College\\College '
-    #                       r'of '
-    #        r'Wooster\\Junior\\cs200 - Algorithm Analysis\\Project Draft\\Shapefiles\\CollegeCampus.shp')
-    # e = c.file_separation(r'C:\\Users\\Brianna\\Documents\\College\\College of '
-    #      r'Wooster\\Junior\\cs200 - Algorithm Analysis\\Project '
-    #      r'Draft\\Shapefiles\\CollegeCampus.dbf')
-    # a = [r'C:\\Users\\Brianna\\Documents\\College\\College of '
-    #      r'Wooster\\Junior\\cs200 - Algorithm Analysis\\Project '
-    #      r'Draft\\Shapefiles\\CollegeCampus.dbf', r'C:\\Users\\Brianna\\Documents\\College\\College of Wooster\\Junior\\cs200 - Algorithm Analysis\\Project Draft\\Shapefiles\\CollegeCampus.shp']
-    # d = c.files_checker(a)
-    # print(b)
-    # print(e)
-    # print(d)
-
-    pass
-
-
-if __name__ == '__main__':
-    main()

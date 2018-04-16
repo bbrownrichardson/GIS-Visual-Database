@@ -5,7 +5,6 @@
 
 from read_shapefile import ReadShapeFile
 from sql_functions import InsertDatabase, IndividualGetDatabase, GetAllDatabase
-from error_handling import Invalid
 from upload_requirements import UploadRequirements
 from visual_setup import VisualSetup
 import os
@@ -38,20 +37,17 @@ class Interface:
         :param title: unique title of the profile being selected
         :return: None
         """
-        try:
-            obj = IndividualGetDatabase(title, self._db_file)
-            obj.get_object()
-            temp = obj.get_files()
-            r_obj = ReadShapeFile(self._main_dir, temp['ShpName'],
-                                  temp['DbfName'], title)
-            a = r_obj.read_files(temp['FileDirectory']+temp['ShpName'],
-                                 temp['FileDirectory']+temp['DbfName'])
-            v_obj = VisualSetup(a)
-            app_screens.VisualScreen.plt_var = None
-            app_screens.VisualScreen.plt_var = v_obj.get_plt_2d()
 
-        except Invalid as e:
-            app_screens.PopupError(e)
+        obj = IndividualGetDatabase(title, self._db_file)
+        obj.get_object()
+        temp = obj.get_files()
+        r_obj = ReadShapeFile(self._main_dir, temp['ShpName'],
+                              temp['DbfName'], title)
+        a = r_obj.read_files(temp['FileDirectory'] + temp['ShpName'],
+                             temp['FileDirectory'] + temp['DbfName'])
+        v_obj = VisualSetup(a)
+        app_screens.VisualScreen.plt_var = None
+        app_screens.VisualScreen.plt_var = v_obj.get_plt_2d()
 
     def shape_file_three_dimension(self, title):
         """
@@ -135,7 +131,6 @@ class Interface:
         r_obj = ReadShapeFile(self._main_dir, self.selected_files_dir[0],
                               self.selected_files_dir[1], info_dict['Title'])
         new_dir = r_obj.create_return_new_dir()
-        print(new_dir)
 
         obj.insert_profile()
         obj.insert_object(info_dict['Title'])
@@ -156,11 +151,3 @@ class Interface:
                             self.selected_files[0]['filename'] +
                             self.selected_files[0]['extension'],
                             new_dir)
-
-
-def main():
-    pass
-
-
-if __name__ == '__main__':
-    main()

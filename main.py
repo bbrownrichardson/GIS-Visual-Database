@@ -17,12 +17,7 @@ kv = Builder.load_file('my.kv')
 class VBASEApp(App):
 
     def build(self):
-        # self.manager = ScreenManager(transition=FallOutTransition())
-        # self.manager.add_widget(MainScreen(name='MainScreen'))
-        # self.manager.add_widget(ObjectListScreen(name='ObjectListScreen'))
-        # self.manager.add_widget(UploadScreen(name='UploadScreen'))
-        # self.manager.add_widget(DataEntryScreen(name='DataEntryScreen'))
-        # self.manager.add_widget(VisualScreen(name='VisualScreen'))
+        
         sm = ScreenManager(transition=FallOutTransition())
 
         sm.add_widget(IntroScreen())
