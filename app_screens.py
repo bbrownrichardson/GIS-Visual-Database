@@ -107,14 +107,14 @@ class ObjectListScreen(Screen):
         self.manager.current = 'UploadScreen'
 
     def visual_screen_instance_2d(self, instance):
-        self.interface_call.shape_file_two_dimension(
-            instance.id)
+        ThreadPopup(self.interface_call.shape_file_two_dimension(
+            instance.id))
         Clock.schedule_once(lambda x: self.transition_visual(), .000001)
 
     def visual_screen_instance_3d(self, instance):
-            self.interface_call.shape_file_three_dimension(
-                instance.id)
-            Clock.schedule_once(lambda x: self.transition_visual(), .00001)
+        ThreadPopup(self.interface_call.shape_file_three_dimension(
+                instance.id))
+        Clock.schedule_once(lambda x: self.transition_visual(), .000001)
 
         # self.visual_screen_delay()
         # print(instance.id)
@@ -208,10 +208,14 @@ class UploadScreen(Screen):
         """
         interface_obj = interface.Interface()
         select = interface_obj.while_selecting_files(filename)
-        if select is None:
-            pass
-        elif select is not None:
-            self.files.append(select)
+        if len(self.files) < 5:
+            if select is None:
+                pass
+            elif select is not None:
+                self.files.append(select)
+        elif len(self.files) == 5 and select is not None:
+            PopupMessage('You Only Need Two files\n'
+                         'Remove Some to Proceed')
 
     def selected_files_popup(self):
         """
@@ -465,23 +469,21 @@ class PopupMessage:
 
 
 class ThreadPopup:
-    def __init__(self, some_function):
-        self.process(some_function)
+    def __init__(self, running_func):
+        self.process(running_func)
+        self.pop_up = Popup()
 
     def pop_initate(self):
         content = BoxLayout(orientation='vertical')
         message_label = Label(text='Running some awesome \nbackground '
                                    'tasks...')
         content.add_widget(message_label)
-        dismiss_button = Button(text='OK')
-        content.add_widget(dismiss_button)
         self.pop_up = Popup(title='HOLD ON BABY', content=content,
                             size_hint=(0.3, 0.25))
         self.pop_up.open()
 
-    def process(self, some_function):
-        mythread = threading.Thread(
-            target=some_function)
+    def process(self, running_func):
+        mythread = threading.Thread(target=running_func)
         mythread.start()
         while mythread.isAlive():
             self.pop_initate()
