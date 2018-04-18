@@ -1,0 +1,160 @@
+<IntroScreen>:
+    name: 'IntroScreen'
+    canvas:
+        Color:
+            rgb: [0.243, 0.325, 0.478]
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    GridLayout:
+        cols: 1
+        Label:
+            text: "VBASE"
+            ## color: [0,0,0,1]
+        Widget:
+            size_hint: 1, 4
+        Button:
+            id: transition_to_object
+            text: 'Continue'
+            on_press: root.manager.current = 'ObjectListScreen'
+            on_press: root.update_obj_screen()
+        Label:
+            size_hint: 1, .5
+            text: 'Brianna'
+
+<ObjectListScreen>:
+    name: 'ObjectListScreen'
+    canvas:
+        Color:
+            rgb: [0.243, 0.325, 0.478]
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+
+<UploadScreen>:
+    name: 'UploadScreen'
+    canvas:
+        Color:
+            rgb: [0.243, 0.325, 0.478]
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    GridLayout:
+        cols: 1
+        GridLayout:
+            size_hint: 1, .10
+            cols: 2
+            Button:
+                size_hint: .05, 1
+                text: '<--'
+                on_release: root.manager.current = 'ObjectListScreen'
+            Label:
+                size_hint: 1, .05
+                text: 'SELECT FILES HERE: One .shp and one .dbf of the same filename prefix'
+        BoxLayout:
+            size_hint: 1, 1
+            orientation: 'vertical'
+
+            BoxLayout:
+                size_hint_y: None
+                height: sp(25)
+
+                Button:
+                    text: 'Icon View'
+                    on_press: fc.view_mode = 'icon'
+                Button:
+                    text: 'List View'
+                    on_press: fc.view_mode = 'list'
+            FileChooser:
+                id: fc
+                on_selection: root.selected(fc.selection)
+                FileChooserIconLayout
+                FileChooserListLayout
+
+        BoxLayout:
+            size_hint: 1, .05
+            Button:
+                id: submit_file
+                text: 'See Selected Files'
+                on_press: root.selected_files_popup()
+
+<DataEntryScreen>:
+    name: 'DataEntryScreen'
+    canvas:
+        Color:
+            rgb: [0.243, 0.325, 0.478]
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    GridLayout:
+        cols: 1
+        Label:
+            text: 'Creator:'
+            halign: 'left'
+        BoxLayout:
+            rows: 2
+            TextInput:
+                multiline: False
+                id: creator_id
+                hint_text: 'Enter YOUR Name'
+        Label:
+            text: 'Title:'
+            halign: 'left'
+        TextInput:
+            multiline: False
+            size_hint: .5, 1
+            id: title_id
+            hint_text: 'Title of this profile'
+        Label:
+            text: 'Shapefile Data Entry'
+            halign: 'center'
+        TextInput:
+            multiline: False
+            id: address_id
+            hint_text:'Enter Address'
+        TextInput:
+            multiline: False
+            id: city_id
+            hint_text: 'Enter City'
+        TextInput:
+            multiline: False
+            id: state_id
+            hint_text: 'Enter State'
+        TextInput:
+            multiline: False
+            id: country_id
+            hint_text: 'Enter Country'
+        TextInput:
+            multiline: False
+            id: zipcode_id
+            hint_text: 'Enter Zipcode'
+        Label:
+        Button:
+            id: submit_data_id
+            text: 'Submit'
+            on_press: root.submitting_data()
+
+<VisualScreen>:
+    name: 'VisualScreen'
+    canvas:
+        Color:
+            rgb: [0.243, 0.325, 0.478]
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    BoxLayout:
+        orientation: 'vertical'
+        Button:
+            text: '<--'
+            size_hint: (1, .05)
+            on_press: root.screen_delay()
+        BoxLayout:
+            id: visual_box
+            orientation: 'vertical'
+        Button:
+            id: map_button
+            text: 'Show Map'
+            size_hint: (1, .05)
+            on_press: root.set_map()
+
