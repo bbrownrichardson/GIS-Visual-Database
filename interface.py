@@ -218,11 +218,3 @@ class Interface:
                             self.selected_files[0]['filename'] +
                             self.selected_files[0]['extension'],
                             new_dir)
-
-
-def main():
-    pass
-
-
-if __name__ == '__main__':
-    main()
