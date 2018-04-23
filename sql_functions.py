@@ -223,7 +223,7 @@ class GetAllDatabase:
 
         info = cur.fetchall()
 
-        all_data_list = []
+        all_data_list = list()
 
         for i in info:
             all_data_list.append({
