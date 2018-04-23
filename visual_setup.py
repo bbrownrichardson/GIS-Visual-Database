@@ -79,7 +79,7 @@ class VisualSetup:
                 self.polygon_to_multipatch(shapes[i])
 
             elif shapes[i].shapeType == MULTIPATCH:
-                # go typical 3D scene setup
+                # go typical through 3D scene setup
                 self.multipatch_draw(shapes[i])
 
         self.sf_writer.save("3D_temp")
@@ -119,6 +119,7 @@ class VisualSetup:
         :param shape_type: shape type of shape argument
         :return: None
         """
+
         if shape_type == POINT or MULTIPOINT or POINTM or MULTIPOINTM:
             for i in shape.points:
                 self.sf_writer.point(i[0], i[1], 0.5, shapeType=POINTZ)

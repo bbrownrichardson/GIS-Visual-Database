@@ -12,8 +12,7 @@ from kivy.uix.bubble import BubbleButton
 from kivy.uix.popup import Popup
 from kivy.uix.button import Button
 from kivy.clock import Clock
-from kivy.garden.matplotlib.backend_kivyagg import FigureCanvasKivy, \
-    FigureCanvasKivyAgg, FigureCanvas, FigureCanvasAgg, NavigationToolbar, \
+from kivy.garden.matplotlib.backend_kivyagg import FigureCanvasKivyAgg, \
     NavigationToolbar2Kivy
 import matplotlib as mpl
 from mpl_toolkits.mplot3d import Axes3D
@@ -219,13 +218,13 @@ class UploadScreen(Screen):
         file_layout = GridLayout(cols=1)
         scroll_view.add_widget(file_layout)
 
-        for i in UploadScreen.files:
+        for file in UploadScreen.files:
             obj = interface.Interface()
-            cur_file = obj.file_path_name(i)
-            if i is None:
+            cur_file = obj.file_path_name(file)
+            if file is None:
                 pass
-            elif i is not None:
-                a = Button(id=i, text=(cur_file['filename']+cur_file[
+            elif file is not None:
+                a = Button(id=file, text=(cur_file['filename']+cur_file[
                     'extension']))
                 a.bind(on_press=self.file_instance)
                 file_layout.add_widget(a)
@@ -371,7 +370,6 @@ class VisualScreen(Screen):
         :return: None
         """
         box = self.ids.visual_box
-        # box.add_widget(FigureCanvasKivyAgg(self.plt_var))
         temp = FigureCanvasKivyAgg(self.plt_var)
         box.add_widget(temp)
         navigation = NavigationToolbar2Kivy(temp)
