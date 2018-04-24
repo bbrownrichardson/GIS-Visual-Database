@@ -100,16 +100,20 @@ class Interface:
         :param title: unique title of the profile being selected
         :return: None
         """
-        obj = IndividualGetDatabase(title, self._db_file)
-        obj.get_object()
-        temp = obj.get_files()
-        r_obj = ReadShapeFile(self._main_dir, temp['ShpName'],
-                              temp['DbfName'], title)
-        a = r_obj.read_files(temp['FileDirectory'] + temp['ShpName'],
-                             temp['FileDirectory'] + temp['DbfName'])
-        v_obj = VisualSetup(a)
-        app_screens.VisualScreen.plt_var = None
-        app_screens.VisualScreen.plt_var = v_obj.get_plt_2d()
+        try:
+            obj = IndividualGetDatabase(title, self._db_file)
+            obj.get_object()
+            temp = obj.get_files()
+            r_obj = ReadShapeFile(self._main_dir, temp['ShpName'],
+                                  temp['DbfName'], title)
+            a = r_obj.read_files(temp['FileDirectory']+temp['ShpName'],
+                                 temp['FileDirectory']+temp['DbfName'])
+            v_obj = VisualSetup(a)
+            app_screens.VisualScreen.plt_var = None
+            app_screens.VisualScreen.plt_var = v_obj.get_plt_2d()
+
+        except Invalid as e:
+            app_screens.PopupError(e)
 
     def shape_file_three_dimension(self, title):
         """
@@ -181,6 +185,19 @@ class Interface:
             self.selected_files_dir.append(i)
             self.selected_files.append(obj.file_separation(i))
 
+    def check_existence_database(self, title):
+        """
+        Check if item's unique identifier title is in database
+        :param title: Unique identifier of an item in database
+        :return: False if entry is in database or True is not in the database
+        """
+        indiv_get_obj = IndividualGetDatabase(title, self._db_file)
+        response = indiv_get_obj.exist_or_not()
+        if response is True:
+            return False
+        else:
+            return True
+
     def insert_profile_database(self, info_dict):
         """
         Insert an entire profile into the database
@@ -189,7 +206,6 @@ class Interface:
         :return: None
         """
         obj = InsertDatabase(info_dict['Creator'], self._db_file)
-
         r_obj = ReadShapeFile(self._main_dir, self.selected_files_dir[0],
                               self.selected_files_dir[1], info_dict['Title'])
         new_dir = r_obj.create_return_new_dir()

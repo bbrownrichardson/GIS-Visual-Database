@@ -104,6 +104,25 @@ class IndividualGetDatabase:
         self._pid = None
         self._oid = None
 
+    def exist_or_not(self):
+        """
+        Check if entry is currently in database
+        :return: True if in database and False if not in database
+        """
+        conn = sqlite3.connect(self._db_file)
+
+        cur = conn.cursor()
+
+        cur.execute("""SELECT COUNT(TITLE) FROM Object
+                    WHERE Title = ? """, (self.title,))
+
+        info = cur.fetchone()
+
+        if info[0] > 0:
+            return True
+        else:
+            return False
+
     def get_object(self):
         """
         Get all data in for an object in the Object table
@@ -118,6 +137,7 @@ class IndividualGetDatabase:
                     (self.title, ))
 
         info = cur.fetchall()
+
         self._oid = info[0][0]
         self._pid = info[0][3]
 
@@ -159,6 +179,7 @@ class IndividualGetDatabase:
         WHERE ObjectId = ?""", (self._oid,))
 
         info = cur.fetchall()
+
         location_data = {
             'LocationId': info[0][0],
             'Address': info[0][1],
