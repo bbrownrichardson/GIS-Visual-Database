@@ -218,13 +218,13 @@ class UploadScreen(Screen):
         file_layout = GridLayout(cols=1)
         scroll_view.add_widget(file_layout)
 
-        for file in UploadScreen.files:
+        for i in UploadScreen.files:
             obj = interface.Interface()
-            cur_file = obj.file_path_name(file)
-            if file is None:
+            cur_file = obj.file_path_name(i)
+            if i is None:
                 pass
-            elif file is not None:
-                a = Button(id=file, text=(cur_file['filename']+cur_file[
+            elif i is not None:
+                a = Button(id=i, text=(cur_file['filename']+cur_file[
                     'extension']))
                 a.bind(on_press=self.file_instance)
                 file_layout.add_widget(a)
@@ -316,13 +316,18 @@ class DataEntryScreen(Screen):
             }
             int_obj = interface.Interface()
             int_obj.selected_db_names(self.files)
-            int_obj.insert_profile_database(temp_dict)
 
-            UploadScreen.files = list()
-            self.manager.current = 'ObjectListScreen'
-            self.clear_entries()
-            objscrn = ObjectListScreen()
-            objscrn.show_objects()
+            response = int_obj.check_existence_database(temp_dict['Title'])
+
+            if response is False:
+                PopupMessage('Lets be Unique. \nChoose a Different Title')
+
+            elif response is True:
+                int_obj.insert_profile_database(temp_dict)
+                self.manager.current = 'ObjectListScreen'
+                self.clear_entries()
+                objscrn = ObjectListScreen()
+                objscrn.show_objects()
 
         else:
             temp_dict = {
@@ -336,19 +341,25 @@ class DataEntryScreen(Screen):
             }
             int_obj = interface.Interface()
             int_obj.selected_db_names(self.files)
-            int_obj.insert_profile_database(temp_dict)
 
-            UploadScreen.files = list()
-            self.manager.current = 'ObjectListScreen'
-            self.clear_entries()
-            objscrn = ObjectListScreen()
-            objscrn.show_objects()
+            response = int_obj.check_existence_database(temp_dict['Title'])
+
+            if response is False:
+                PopupMessage('Lets be Unique. \nChoose a Different Title')
+
+            elif response is True:
+                int_obj.insert_profile_database(temp_dict)
+                self.manager.current = 'ObjectListScreen'
+                self.clear_entries()
+                objscrn = ObjectListScreen()
+                objscrn.show_objects()
 
     def clear_entries(self):
         """
         Clear data fields
         :return: None
         """
+        UploadScreen.files = list()
         self.ids.creator_id.text = ''
         self.ids.title_id.text = ''
         self.ids.address_id.text = ''
