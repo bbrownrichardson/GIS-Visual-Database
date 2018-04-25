@@ -6,6 +6,7 @@
 import shapefile
 import matplotlib.pyplot as plt
 import random
+from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 import numpy as np
 
 # Constants for shape types
@@ -79,7 +80,7 @@ class VisualSetup:
                 self.polygon_to_multipatch(shapes[i])
 
             elif shapes[i].shapeType == MULTIPATCH:
-                # go typical through 3D scene setup
+                # go typical 3D scene setup
                 self.multipatch_draw(shapes[i])
 
         self.sf_writer.save("3D_temp")
@@ -98,13 +99,12 @@ class VisualSetup:
             floor.append([i[0], i[1], 0])
             ceiling.append([i[0], i[1], 1])
 
-        part.append(floor)
-        part.append(ceiling)
         for i in range(1, len(floor), 1):
             j = i - 1
             surface = [floor[j], floor[j + 1], ceiling[j], ceiling[j + 1]]
             part.append(surface)
-
+        part.append(floor)
+        part.append(ceiling)
         for i in range(0, len(part), 1):
             shapestype.append(POLYGON)
 
@@ -162,10 +162,23 @@ class VisualSetup:
         :param rand_color: color value for a particular shape
         :return: None
         """
+
         # if z_coordinates are all the same value that means
         # shape is flat surface
+        self.fig.add_subplot(projection='3d')
+        ax = self.fig.gca(projection='3d')
+        ax.set_axis_off()
         if all(x == z_part[0] for x in z_part) is True:
-            pass
+            x_coors = list()
+            y_coors = list()
+            z_coors = list()
+
+            for p in range(0, len(xy_coors), 1):
+                x_coors.append(xy_coors[p][0])
+                y_coors.append(xy_coors[p][1])
+                z_coors.append(z_part[p])
+            verts = [zip(x_coors, y_coors, z_coors)]
+            ax.add_collection3d(Poly3DCollection(verts, facecolors=rand_color))
 
         # not a flat surface
         else:
@@ -186,10 +199,7 @@ class VisualSetup:
 
             z_ranges.append(z_floor)
             z_ranges.append(z_ceiling)
-            self.fig.add_subplot(projection='3d')
-            ax = self.fig.gca(projection='3d')
             ax.set_zlim(0, max(z_coors) + 5)
-            ax.set_axis_off()
             x = np.array(x_coors)
             y = np.array(y_coors)
             z = np.array(z_ranges)
