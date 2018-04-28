@@ -1,6 +1,6 @@
 # Brianna Brown Richardson
 # Interface Module for VBASE project
-# Last Modified Date:
+# Last Modified Date: 28 April 2018
 # CS200 - Algorithm Analysis
 
 from read_shapefile import ReadShapeFile
@@ -22,13 +22,25 @@ class Interface:
         self._db_file = 'db.sqlite'
 
     def if_not_exist(self):
+        """
+        Create an Uploaded_Shapefiles directory or database file in current
+        working directory is not present create/replace directory or
+        database file to ensure upload directory and database are on the
+        same page
+        :return: None
+        """
         if not os.path.exists(os.getcwd() + '\Uploaded_Shapefiles' + chr(92)):
             os.makedirs(os.getcwd() + '\Uploaded_Shapefiles' + chr(92))
         self._main_dir = os.getcwd() + '\Uploaded_Shapefiles' + chr(92)
+        self.create_db()
         if not os.path.isfile(os.getcwd() + '\db.sqlite'):
             self.create_db()
 
     def create_db(self):
+        """
+        Create database file using the provided schema
+        :return: None
+        """
         conn = sqlite3.connect('db.sqlite')
         cur = conn.cursor()
 
@@ -100,20 +112,16 @@ class Interface:
         :param title: unique title of the profile being selected
         :return: None
         """
-        try:
-            obj = IndividualGetDatabase(title, self._db_file)
-            obj.get_object()
-            temp = obj.get_files()
-            r_obj = ReadShapeFile(self._main_dir, temp['ShpName'],
-                                  temp['DbfName'], title)
-            a = r_obj.read_files(temp['FileDirectory']+temp['ShpName'],
-                                 temp['FileDirectory']+temp['DbfName'])
-            v_obj = VisualSetup(a)
-            app_screens.VisualScreen.plt_var = None
-            app_screens.VisualScreen.plt_var = v_obj.get_plt_2d()
-
-        except Invalid as e:
-            app_screens.PopupError(e)
+        obj = IndividualGetDatabase(title, self._db_file)
+        obj.get_object()
+        temp = obj.get_files()
+        r_obj = ReadShapeFile(self._main_dir, temp['ShpName'],
+                              temp['DbfName'], title)
+        a = r_obj.read_files(temp['FileDirectory'] + temp['ShpName'],
+                             temp['FileDirectory'] + temp['DbfName'])
+        v_obj = VisualSetup(a)
+        app_screens.VisualScreen.plt_var = None
+        app_screens.VisualScreen.plt_var = v_obj.get_plt_2d()
 
     def shape_file_three_dimension(self, title):
         """

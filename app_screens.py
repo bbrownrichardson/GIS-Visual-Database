@@ -1,6 +1,6 @@
 # Brianna Brown Richardson
 # Frontend (App Screens) Module for VBASE project
-# Last Modified Date:
+# Last Modified Date: 28 April 2018
 # CS200 - Algorithm Analysis
 
 from kivy.uix.screenmanager import Screen
@@ -91,22 +91,49 @@ class ObjectListScreen(Screen):
         return self.title_returned
 
     def delay_upload_screen(self):
+        """
+        One time scheduled call to the function transition_upload()
+        :return: None
+        """
         Clock.schedule_once(lambda x: self.transition_upload(), .0000001)
 
     def transition_upload(self):
+        """
+        Transition to UploadScreen Screen
+        :return: None
+        """
         self.manager.current = 'UploadScreen'
 
     def visual_screen_instance_2d(self, instance):
+        """
+        Take the id of an instance and call the method to visual shapefiles
+        in 2D while initiating thread loading popup and schedule a call for
+        transition_visual function
+        :param instance: button instance
+        :return: None
+        """
         ThreadPopup(self.interface_call.shape_file_two_dimension(
             instance.id))
         Clock.schedule_once(lambda x: self.transition_visual(), .000001)
 
     def visual_screen_instance_3d(self, instance):
+        """
+        Take the id of an instance and call the method to visual shapefiles
+        in 3D while initiating thread loading popup and schedule a call for
+        transition_visual function
+        :param instance: button instance
+        :return: None
+        """
         ThreadPopup(self.interface_call.shape_file_three_dimension(
                 instance.id))
         Clock.schedule_once(lambda x: self.transition_visual(), .000001)
 
     def transition_visual(self):
+        """
+        Initiate a transition to visual screen after setting the map widget
+        on the visualscreen
+        :return: None
+        """
         v_obj = VisualScreen()
         Clock.schedule_once(lambda x: v_obj.set_map(), .00001)
         self.manager.current = 'VisualScreen'
@@ -275,6 +302,10 @@ class UploadScreen(Screen):
             PopupMessage('Incorrect Files \nSelected!!')
 
     def return_to_obj_screen(self):
+        """
+        Reset class attributes
+        :return: None
+        """
         self.files = list()
 
 
