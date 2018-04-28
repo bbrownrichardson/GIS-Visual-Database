@@ -38,10 +38,20 @@ class VisualSetup:
         shapefile
         :return: ax - figure containing visualized data
         """
-        for shape in self.sf_reader.shapes():
-            x = [i[0] for i in shape.points[:]]
-            y = [i[1] for i in shape.points[:]]
-            plt.plot(x, y)
+        for shape in self.sf_reader.iterShapeRecords():
+            if shape.shape.shapeType == NULL:
+                pass
+            elif shape.shape.shapeType == (POINT or MULTIPOINT or POINTM or
+                                           MULTIPOINTM or POINTZ or
+                                           MULTIPOINTZ):
+                x = [i[0] for i in shape.shape.points[:]]
+                y = [i[1] for i in shape.shape.points[:]]
+                plt.scatter(x, y)
+
+            else:
+                x = [i[0] for i in shape.shape.points[:]]
+                y = [i[1] for i in shape.shape.points[:]]
+                plt.plot(x, y)
 
         ax = plt.gcf()
         plt.axis('off')
