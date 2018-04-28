@@ -31,8 +31,9 @@ class Interface:
         """
         if not os.path.exists(os.getcwd() + '\Uploaded_Shapefiles' + chr(92)):
             os.makedirs(os.getcwd() + '\Uploaded_Shapefiles' + chr(92))
+            self.create_db()
         self._main_dir = os.getcwd() + '\Uploaded_Shapefiles' + chr(92)
-        self.create_db()
+        
         if not os.path.isfile(os.getcwd() + '\db.sqlite'):
             self.create_db()
 
