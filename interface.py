@@ -8,6 +8,7 @@ from sql_functions import InsertDatabase, IndividualGetDatabase, GetAllDatabase
 from upload_requirements import UploadRequirements
 from visual_setup import VisualSetup
 import os
+import shutil
 import app_screens
 import sqlite3
 
@@ -16,10 +17,10 @@ class Interface:
     def __init__(self):
         self.title = None
         self._main_dir = None
+        self._db_file = None
         self.selected_files_dir = list()
         self.selected_files = list()
         self.if_not_exist()
-        self._db_file = 'db.sqlite'
 
     def if_not_exist(self):
         """
@@ -29,13 +30,23 @@ class Interface:
         same page
         :return: None
         """
-        if not os.path.exists(os.getcwd() + '\Uploaded_Shapefiles' + chr(92)):
+        if not os.path.exists(os.getcwd() + '\Uploaded_Shapefiles' + chr(92)) \
+                or not os.path.isfile(os.getcwd() + '\db.sqlite'):
+            self.reset_upload_dir()
             os.makedirs(os.getcwd() + '\Uploaded_Shapefiles' + chr(92))
             self.create_db()
+
         self._main_dir = os.getcwd() + '\Uploaded_Shapefiles' + chr(92)
-        
-        if not os.path.isfile(os.getcwd() + '\db.sqlite'):
-            self.create_db()
+        self._db_file = 'db.sqlite'
+
+    @staticmethod
+    def reset_upload_dir():
+        """
+        Reset Uploaded Shapefile directory if it currently exist
+        :return: None
+        """
+        if os.path.exists(os.getcwd() + '\Uploaded_Shapefiles' + chr(92)):
+            shutil.rmtree(os.getcwd() + '\Uploaded_Shapefiles' + chr(92))
 
     def create_db(self):
         """
